@@ -1,0 +1,11 @@
+{
+    "id": "/subscriptions/852e9ef4-b85d-454c-8aa5-abd810688d2f/resourceGroups/MultiSoftware_Enterprise",
+    "name": "MultiSoftware_Enterprise",
+    "type": "Microsoft.Resources/resourceGroups",
+    "location": "northeurope",
+    "tags": {},
+    "properties": {
+        "provisioningState": "Succeeded"
+    },
+    "apiVersion": "2020-06-01"
+}
