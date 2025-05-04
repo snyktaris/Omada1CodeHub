@@ -1,0 +1,56 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "apimName": {
+            "value": "MultiSoftware-apim"
+        },
+        "location": {
+            "value": "northeurope"
+        },
+        "tier": {
+            "value": "Consumption"
+        },
+        "capacity": {
+            "value": "0"
+        },
+        "adminEmail": {
+            "value": "mbardi@uth.gr"
+        },
+        "organizationName": {
+            "value": "msep25"
+        },
+        "virtualNetworkType": {
+            "value": "None"
+        },
+        "tagsByResource": {
+            "value": {}
+        },
+        "vnet": {
+            "value": {}
+        },
+        "zones": {
+            "value": []
+        },
+        "customProperties": {
+            "value": {}
+        },
+        "identity": {
+            "value": {
+                "type": "None"
+            }
+        },
+        "appInsightsObject": {
+            "value": {
+                "id": "/subscriptions/852e9ef4-b85d-454c-8aa5-abd810688d2f/resourceGroups/MultiSoftware_Enterprise/providers/microsoft.insights/components/MultiSoftware",
+                "name": "MultiSoftware"
+            }
+        },
+        "privateDnsDeploymentName": {
+            "value": "PrivateDNS-1746038727539"
+        },
+        "subnetDeploymentName": {
+            "value": "UpdateSubnetDeployment-1746038727539"
+        }
+    }
+}

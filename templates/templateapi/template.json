@@ -1,0 +1,180 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "apimName": {
+            "type": "string"
+        },
+        "zones": {
+            "type": "array"
+        },
+        "location": {
+            "type": "string"
+        },
+        "tier": {
+            "type": "string"
+        },
+        "capacity": {
+            "type": "string"
+        },
+        "adminEmail": {
+            "type": "string"
+        },
+        "organizationName": {
+            "type": "string"
+        },
+        "virtualNetworkType": {
+            "type": "string"
+        },
+        "tagsByResource": {
+            "type": "object"
+        },
+        "vnet": {
+            "type": "object"
+        },
+        "customProperties": {
+            "type": "object"
+        },
+        "identity": {
+            "type": "object"
+        },
+        "appInsightsObject": {
+            "type": "object"
+        },
+        "privateDnsDeploymentName": {
+            "type": "string"
+        },
+        "subnetDeploymentName": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "apimNsgName": "[concat('apimnsg', uniqueString(resourceGroup().id), parameters('apimName'))]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2017-05-10",
+            "name": "logAnalyticDeployment",
+            "type": "Microsoft.Resources/deployments",
+            "subscriptionId": "852e9ef4-b85d-454c-8aa5-abd810688d2f",
+            "resourceGroup": "MultiSoftware_Enterprise",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        {
+                            "location": "northeurope",
+                            "apiVersion": "2017-03-15-preview",
+                            "name": "msdata",
+                            "type": "Microsoft.OperationalInsights/workspaces",
+                            "properties": {
+                                "sku": {
+                                    "name": "pergb2018"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Insights/diagnosticSettings",
+            "apiVersion": "2021-05-01-preview",
+            "name": "default",
+            "scope": "[concat('Microsoft.ApiManagement/service/', parameters('apimName'))]",
+            "dependsOn": [
+                "[concat('Microsoft.ApiManagement/service/', parameters('apimName'))]",
+                "logAnalyticDeployment"
+            ],
+            "properties": {
+                "logs": [
+                    {
+                        "category": "GatewayLogs",
+                        "categoryGroup": null,
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": 0,
+                            "enabled": false
+                        }
+                    },
+                    {
+                        "category": "WebSocketConnectionLogs",
+                        "categoryGroup": null,
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": 0,
+                            "enabled": false
+                        }
+                    }
+                ],
+                "metrics": [
+                    {
+                        "enabled": false,
+                        "retentionPolicy": {
+                            "days": 0,
+                            "enabled": false
+                        },
+                        "category": "AllMetrics"
+                    }
+                ],
+                "workspaceId": "/subscriptions/852e9ef4-b85d-454c-8aa5-abd810688d2f/resourcegroups/MultiSoftware_Enterprise/providers/Microsoft.OperationalInsights/workspaces/msdata",
+                "logAnalyticsDestinationType": "Dedicated"
+            }
+        },
+        {
+            "type": "Microsoft.ApiManagement/service",
+            "apiVersion": "2022-09-01-preview",
+            "name": "[parameters('apimName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('tier')]",
+                "capacity": "[parameters('capacity')]"
+            },
+            "zones": "[parameters('zones')]",
+            "identity": "[parameters('identity')]",
+            "tags": "[parameters('tagsByResource')]",
+            "properties": {
+                "publisherEmail": "[parameters('adminEmail')]",
+                "publisherName": "[parameters('organizationName')]",
+                "customProperties": "[parameters('customProperties')]"
+            },
+            "resources": [
+                {
+                    "type": "loggers",
+                    "apiVersion": "2019-01-01",
+                    "name": "[parameters('appInsightsObject').name]",
+                    "dependsOn": [
+                        "[concat('Microsoft.ApiManagement/service/', parameters('apimName'))]"
+                    ],
+                    "properties": {
+                        "loggerType": "applicationInsights",
+                        "resourceId": "[parameters('appInsightsObject').id]",
+                        "credentials": {
+                            "instrumentationKey": "[reference(parameters('appInsightsObject').id, '2015-05-01').InstrumentationKey]"
+                        }
+                    }
+                },
+                {
+                    "type": "diagnostics",
+                    "apiVersion": "2019-01-01",
+                    "name": "applicationinsights",
+                    "dependsOn": [
+                        "[concat('Microsoft.ApiManagement/service/', parameters('apimName'))]",
+                        "[concat('Microsoft.ApiManagement/service/', parameters('apimName'), '/loggers/', parameters('appInsightsObject').name)]"
+                    ],
+                    "properties": {
+                        "loggerId": "[concat('/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/', parameters('apimName'), '/loggers/', parameters('appInsightsObject').name)]",
+                        "alwaysLog": "allErrors",
+                        "sampling": {
+                            "percentage": 100,
+                            "samplingType": "fixed"
+                        }
+                    }
+                }
+            ],
+            "dependsOn": []
+        }
+    ]
+}

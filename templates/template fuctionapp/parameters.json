@@ -1,0 +1,45 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "subscriptionId": {
+            "value": "852e9ef4-b85d-454c-8aa5-abd810688d2f"
+        },
+        "name": {
+            "value": "omada1"
+        },
+        "location": {
+            "value": "North Europe"
+        },
+        "storageBlobContainerName": {
+            "value": "app-package-omada1-27dac73"
+        },
+        "storageAccountName": {
+            "value": "multisoftwareenterpabd6"
+        },
+        "sku": {
+            "value": "FlexConsumption"
+        },
+        "skuCode": {
+            "value": "FC1"
+        },
+        "workerSize": {
+            "value": "0"
+        },
+        "workerSizeId": {
+            "value": "0"
+        },
+        "numberOfWorkers": {
+            "value": "1"
+        },
+        "hostingPlanName": {
+            "value": "ASP-MultiSoftwareEnterprise-b29a"
+        },
+        "serverFarmResourceGroup": {
+            "value": "MultiSoftware_Enterprise"
+        },
+        "alwaysOn": {
+            "value": false
+        }
+    }
+}

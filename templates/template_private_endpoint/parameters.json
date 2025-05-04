@@ -1,0 +1,38 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "northeurope"
+        },
+        "privateEndpointName": {
+            "value": "mse_private_endpoint"
+        },
+        "privateLinkResource": {
+            "value": "/subscriptions/852e9ef4-b85d-454c-8aa5-abd810688d2f/resourceGroups/MultiSoftware_Enterprise/providers/Microsoft.Sql/servers/msep25"
+        },
+        "targetSubResource": {
+            "value": [
+                "sqlServer"
+            ]
+        },
+        "requestMessage": {
+            "value": ""
+        },
+        "subnet": {
+            "value": "/subscriptions/852e9ef4-b85d-454c-8aa5-abd810688d2f/resourceGroups/MultiSoftware_Enterprise/providers/Microsoft.Network/virtualNetworks/mse_network/subnets/mse_subnet"
+        },
+        "virtualNetworkId": {
+            "value": "/subscriptions/852e9ef4-b85d-454c-8aa5-abd810688d2f/resourceGroups/MultiSoftware_Enterprise/providers/Microsoft.Network/virtualNetworks/mse_network"
+        },
+        "subnetDeploymentName": {
+            "value": "UpdateSubnetDeployment-20250501160818"
+        },
+        "virtualNetworkResourceGroup": {
+            "value": "MultiSoftware_Enterprise"
+        },
+        "privateDnsDeploymentName": {
+            "value": "PrivateDns-20250501160819"
+        }
+    }
+}
